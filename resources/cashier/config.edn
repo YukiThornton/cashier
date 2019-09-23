@@ -1,0 +1,18 @@
+{:duct.profile/base
+ {:duct.core/project-ns cashier
+  :duct.server.http/jetty
+  {:port 3333}
+
+  :cashier.handler.health/get-health {}
+  :cashier.handler.exchange/post-exchange {}}
+
+ :duct.profile/dev   #duct/include "dev"
+ :duct.profile/local #duct/include "local"
+ :duct.profile/prod  {}
+
+ :duct.module/logging {}
+ :duct.module.web/api {}
+
+ :duct.module/ataraxy
+ {[:get "/health"] [:health/get-health]
+  [:post "/exchange"] [:exchange/post-exchange]}}
