@@ -8,4 +8,4 @@
   (testing "GET /health returns 200"
     (let [handler (ig/init-key :cashier.handler.health/get-health {})
           response (handler (mock/request :get "/health"))]
-      (is (= :ataraxy.response/ok (first response))))))
+      (is (= 200 (:status response))))))

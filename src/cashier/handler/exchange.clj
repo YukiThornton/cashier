@@ -1,8 +1,8 @@
 (ns cashier.handler.exchange
   (:require [ataraxy.core :as ataraxy]
-            [ataraxy.response :as response] 
+            [ring.util.response :as res]
             [integrant.core :as ig]))
 
 (defmethod ig/init-key ::post-exchange [_ options]
-  (fn [{[_] :ataraxy/result}]
-    [::response/ok {:status "ok"}]))
+  (fn [{[_ money] :ataraxy/result}]
+    (res/response {:money money})))

@@ -1,8 +1,8 @@
 (ns cashier.handler.health
   (:require [ataraxy.core :as ataraxy]
-            [ataraxy.response :as response] 
+            [ring.util.response :as res]
             [integrant.core :as ig]))
 
 (defmethod ig/init-key ::get-health [_ options]
   (fn [{[_] :ataraxy/result}]
-    [::response/ok {:status "ok"}]))
+    (res/response {:status "ok"})))

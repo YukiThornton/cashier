@@ -7,5 +7,5 @@
 (deftest post-exchange-test
   (testing "POST /exchange returns 200"
     (let [handler (ig/init-key :cashier.handler.exchange/post-exchange {})
-          response (handler (mock/request :post "/exchange" {:coin100 5}))]
-      (is (= :ataraxy.response/ok (first response))))))
+          response (handler (mock/request :post "/exchange"))]
+      (is (= 200 (:status response))))))

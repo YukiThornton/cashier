@@ -15,4 +15,4 @@
 
  :duct.module/ataraxy
  {[:get "/health"] [:health/get-health]
-  [:post "/exchange"] [:exchange/post-exchange]}}
+  [:post "/exchange" {{:keys [money]} :body-params}] [:exchange/post-exchange money]}}
