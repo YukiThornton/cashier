@@ -3,8 +3,16 @@
   :duct.server.http/jetty
   {:port 3333}
 
+  :cashier.core.usecase.cash/calc-sum
+  {}
+  :cashier.core.usecase.cash/calc-change
+  {}
+
   :cashier.handler.health/get-health {}
-  :cashier.handler.exchange/post-exchange {}}
+  :cashier.handler.cash/get-sum
+  {:calc-sum #ig/ref :cashier.core.usecase.cash/calc-sum}
+  :cashier.handler.cash/get-change
+  {:calc-change #ig/ref :cashier.core.usecase.cash/calc-change}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
@@ -15,4 +23,5 @@
 
  :duct.module/ataraxy
  {[:get "/health"] [:health/get-health]
-  [:post "/exchange" {{:keys [money]} :body-params}] [:exchange/post-exchange money]}}
+  [:get "/sum" {cash :params}] [:cash/get-sum cash]
+  [:get "/change" {params :params}] [:cash/get-change params]}}
