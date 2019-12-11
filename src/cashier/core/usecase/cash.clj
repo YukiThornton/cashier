@@ -9,7 +9,7 @@
 
 (defn- get-cash-available [port]
   (try
-    (cashier.port.cash/cash-available port)
+    (cashier.port.cash/cash-available port ent/cash-value)
     (catch Exception e (throw (ex-info "Change is not accessible" {:system-error true})))))
 
 (defn- get-valid-change-sum [charge cash]

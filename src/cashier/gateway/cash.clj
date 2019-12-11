@@ -16,10 +16,9 @@
   (reduce #(assoc %1 (:value %2) (:num %2)) {} seq-of-map))
 
 (defmethod ig/init-key ::cash-available [_ {:keys [find-cash-count]}]
-  (fn []
+  (fn [type&value-map]
     (let [cash-found (find-cash-count)
           value&count-map (to-value&count-map cash-found)
-          type&value-map ent/cash-value
           type&count-map (aggregate type&value-map value&count-map)]
       type&count-map)))
 

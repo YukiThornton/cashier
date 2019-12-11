@@ -16,7 +16,16 @@
                    {:value 5000, :num 222}
                    {:value 10000, :num 111}))
           f (ig/init-key :cashier.gateway.cash/cash-available {:find-cash-count find-cash-count-mock})
-          result (f)]
+          cash-def {:cash-10000 10000
+                    :cash-5000   5000
+                    :cash-1000   1000
+                    :cash-500     500
+                    :cash-100     100
+                    :cash-50       50
+                    :cash-10       10
+                    :cash-5         5
+                    :cash-1         1}
+          result (f cash-def)]
       (t/is (= {:cash-1 999
                 :cash-5 888
                 :cash-10 777
@@ -33,7 +42,16 @@
           (fn [] '({:value 50, :num 666}
                    {:value 100, :num 555}))
           f (ig/init-key :cashier.gateway.cash/cash-available {:find-cash-count find-cash-count-mock})
-          result (f)]
+          cash-def {:cash-10000 10000
+                    :cash-5000   5000
+                    :cash-1000   1000
+                    :cash-500     500
+                    :cash-100     100
+                    :cash-50       50
+                    :cash-10       10
+                    :cash-5         5
+                    :cash-1         1}
+          result (f cash-def)]
       (t/is (= {:cash-50 666
                 :cash-100 555}
                result))))
@@ -41,5 +59,14 @@
   (t/testing "Does not return when value does not exist on cash definition"
     (let [find-cash-count-mock (fn [] '({:value 999 :count 888}))
           f (ig/init-key :cashier.gateway.cash/cash-available {:find-cash-count find-cash-count-mock})
-          result (f)]
+          cash-def {:cash-10000 10000
+                    :cash-5000   5000
+                    :cash-1000   1000
+                    :cash-500     500
+                    :cash-100     100
+                    :cash-50       50
+                    :cash-10       10
+                    :cash-5         5
+                    :cash-1         1}
+          result (f cash-def)]
       (t/is (= {} result)))))
