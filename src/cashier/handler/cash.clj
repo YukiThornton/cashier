@@ -45,10 +45,12 @@
   (let [charge (to-integer (:charge params))
         cash (reduce-kv #(assoc %1 %2 (to-integer %3)) {} (dissoc params :charge))]
     (if (and (some? charge) (valid-cash-map? cash))
-      (let [change (calc-change-f charge cash)]
-        (if (some? change)
-          {:status 200 :change change}
-          {:status 400 :message "Insufficient"}))
+      (try
+        {:status 200 :change (calc-change-f charge cash)}
+        (catch Exception e
+          (if (= true (:system-error (ex-data e)))
+            {:status 500 :message (ex-message e)}
+            {:status 400 :message (ex-message e)})))
       {:status 400 :message "Invalid params"})))
 
 (defmethod ig/init-key ::get-change [_ {:keys [calc-change]}]

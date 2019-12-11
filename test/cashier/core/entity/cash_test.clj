@@ -71,22 +71,32 @@
 (deftest get-combination-test
   (testing "Returns a combination of cash for given sum"
     (is (= {:cash-100 2}
-           (target/get-combination 200)))
+           (target/get-combination 200 {:cash-100 999})))
     (is (= {:cash-100 4
             :cash-50 1
             :cash-10 4}
-           (target/get-combination 490)))
+           (target/get-combination 490 {:cash-100 999 :cash-50 999 :cash-10 999})))
     (is (= {:cash-10000 5
             :cash-1 1}
-           (target/get-combination 50001)))
+           (target/get-combination 50001 {:cash-10000 999 :cash-1 999})))
     (is (= {}
-           (target/get-combination 0))))
+           (target/get-combination 0 {}))))
+
+  (testing "Returns a combination of cash in range of available cash"
+    (is (= {:cash-50 4}
+           (target/get-combination 200 {:cash-100 0 :cash-50 4})))
+    (is (= {:cash-100 1 :cash-10 10}
+           (target/get-combination 200 {:cash-100 1 :cash-10 10}))))
+
+  (testing "Returns nil when there is no sufficient cash available"
+    (is (= nil (target/get-combination 200 {})))
+    (is (= nil (target/get-combination 200 {:cash-10000 1 :cash-1 199}))))
 
   (testing "Returns nil when a negative value is passed"
-    (is (nil? (target/get-combination -1))))
+    (is (nil? (target/get-combination -1 {}))))
 
   (testing "Returns nil when a non-integer value is passed"
-    (is (nil? (target/get-combination 0.1)))
-    (is (nil? (target/get-combination -0.1)))
-    (is (nil? (target/get-combination "hello")))
-    (is (nil? (target/get-combination nil)))))
+    (is (nil? (target/get-combination 0.1 {})))
+    (is (nil? (target/get-combination -0.1 {})))
+    (is (nil? (target/get-combination "hello" {})))
+    (is (nil? (target/get-combination nil {})))))

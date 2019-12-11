@@ -38,7 +38,7 @@
     (when-not (neg? index)
       (subvec desc-cash-keys (inc index)))))
 
-(defn- valid-sum? [sum]
+(defn valid-sum? [sum]
   (and (integer? sum) (not (neg? sum))))
 
 (defn- assoc-if [pred m k v]
@@ -47,16 +47,18 @@
 (defn- rest-into-map [m]
   (into {} (rest m)))
 
-(defn- assoc-cash-if-dividable [sum cash-values cash-counts]
+(defn- assoc-cash-if-dividable [sum cash-values cash-available cash-counts]
   (let [[cash-key cash-val] (first cash-values)
         quotient (quot sum cash-val)
-        remainder (- sum (* quotient cash-val))
-        result (assoc-if (> quotient 0) cash-counts cash-key quotient)]
-    (if　(> remainder 0)
-      (recur remainder (rest-into-map cash-values) result)
-      result)))
+        available-cash-count (if (contains? cash-available cash-key) (get cash-available cash-key) 0)
+        available-quotient (if (>= quotient available-cash-count) available-cash-count quotient)
+        remainder (- sum (* available-quotient cash-val))
+        result (assoc-if (> available-quotient 0) cash-counts cash-key available-quotient)]
+    (if　(or (<= remainder 0) (<= (count cash-values) 1))
+      (when (<= remainder 0) result)
+      (recur remainder (rest-into-map cash-values) cash-available result))))
 
-(defn get-combination [sum]
+(defn get-combination [sum cash-available]
   (when (valid-sum? sum)
-    (assoc-cash-if-dividable sum desc-cash-map {})))
+    (assoc-cash-if-dividable sum desc-cash-map cash-available {})))
 

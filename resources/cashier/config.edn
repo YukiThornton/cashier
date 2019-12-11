@@ -3,10 +3,19 @@
   :duct.server.http/jetty
   {:port 3333}
 
+  :cashier.driver.db.cash/find-cash-count
+  {:db #ig/ref :duct.database/sql}
+
+  :cashier.gateway.cash/cash-available
+  {:find-cash-count #ig/ref :cashier.driver.db.cash/find-cash-count}
+
+  :cashier.port.cash/cash
+  {:cash-available #ig/ref :cashier.gateway.cash/cash-available}
+
   :cashier.core.usecase.cash/calc-sum
   {}
   :cashier.core.usecase.cash/calc-change
-  {}
+  {:port #ig/ref :cashier.port.cash/cash}
 
   :cashier.handler.health/get-health {}
   :cashier.handler.cash/get-sum
@@ -20,6 +29,8 @@
 
  :duct.module/logging {}
  :duct.module.web/api {}
+ :duct.module/sql
+ {:database-url "jdbc:postgresql://localhost:5432/cashier?user=cashier&password=cashier"}
 
  :duct.module/ataraxy
  {[:get "/health"] [:health/get-health]

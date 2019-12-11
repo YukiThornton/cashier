@@ -6,7 +6,9 @@
                  [duct/core "0.7.0"]
                  [duct/module.ataraxy "0.3.0"]
                  [duct/module.logging "0.4.0"]
-                 [duct/module.web "0.7.0"]]
+                 [duct/module.sql "0.5.0"]
+                 [duct/module.web "0.7.0"]
+                 [org.postgresql/postgresql "42.2.5"]]
   :plugins [[duct/lein-duct "0.12.1"]]
   :main ^:skip-aot cashier.main
   :resource-paths ["resources" "target/resources"]
@@ -22,4 +24,5 @@
                   :resource-paths ["dev/resources"]
                   :dependencies   [[integrant/repl "0.3.1"]
                                    [eftest "0.5.7"]
-                                   [kerodon "0.9.0"]]}})
+                                   [kerodon "0.9.0"]
+                                   [com.gearswithingears/shrubbery "0.4.1"]]}})

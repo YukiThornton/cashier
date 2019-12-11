@@ -77,8 +77,26 @@
   (testing "Returns 400 with message when cash is insufficient"
     (let [usecase-mock
           (fn [charge cash]
-            (when (and (= 5000 charge) (= {:cash-1000 1} cash)) nil))
+            (when (and (= 5000 charge) (= {:cash-1000 1} cash)) (throw (ex-info "MESSAGE" {}))))
           result (target/get-change usecase-mock {:charge "5000" :cash-1000 "1"})]
       (is (= 400 (:status result)))
+      (is (= nil (:change result)))
+      (is (some? (:message result)))))
+
+  (testing "Returns 400 with message when not enough change is available"
+    (let [usecase-mock
+          (fn [charge cash]
+            (when (and (= 5000 charge) (= {:cash-1000 6} cash)) (throw (ex-info "MESSAGE" {}))))
+          result (target/get-change usecase-mock {:charge "5000" :cash-1000 "6"})]
+      (is (= 400 (:status result)))
+      (is (= nil (:change result)))
+      (is (some? (:message result)))))
+
+  (testing "Returns 500 with message when an exception with system-error true is thrown"
+    (let [usecase-mock
+          (fn [charge cash]
+            (when (and (= 500 charge) (= {:cash-1000 1} cash)) (throw (ex-info "MESSAGE" {:system-error true}))))
+          result (target/get-change usecase-mock {:charge "500" :cash-1000 "1"})]
+      (is (= 500 (:status result)))
       (is (= nil (:change result)))
       (is (some? (:message result))))))
